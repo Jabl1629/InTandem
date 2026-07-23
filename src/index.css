@@ -1,0 +1,147 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ============================================================
+   InTandem by GoSteady — design tokens (spec §8)
+   Register: calm clinical software with warmth. One aesthetic
+   risk (the delta band); everything else disciplined and quiet.
+   ============================================================ */
+:root {
+  /* Surfaces — paper white world */
+  --paper: #fafaf7;
+  --paper-raised: #ffffff;
+  --paper-sunken: #f2f2ec;
+  --line: #e6e6dd;
+  --line-strong: #d4d4c8;
+
+  /* Ink — deep spruce nav/text, slate secondary */
+  --spruce: #1e3a34;
+  --spruce-soft: #2f4d46;
+  --slate: #5c6b68;
+  --slate-soft: #8a938f;
+
+  /* Status — desaturated, used ONLY for status (avoid alarm-wall) */
+  --stable: #4c8a5c; /* moss */
+  --watch: #c98a2b; /* ochre */
+  --alert: #b3402f; /* brick */
+  --stable-ink: #2f5c3b;
+  --watch-ink: #8a5c15;
+  --alert-ink: #8a2b1e;
+  --stable-wash: #edf3ee;
+  --watch-wash: #f8f0e1;
+  --alert-wash: #f7e8e4;
+
+  /* Trust accent — glacier blue, reserved for "Families see this"
+     system and Family View identity. The trust color is its own color. */
+  --glacier: #2e6e8e;
+  --glacier-ink: #205169;
+  --glacier-wash: #e8f0f4;
+
+  /* Type */
+  --font-display: 'Fraunces', 'Newsreader', Georgia, 'Times New Roman', serif;
+  --font-ui: 'Inter', 'Public Sans', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+
+  /* Radius */
+  --r-sm: 6px;
+  --r-md: 10px;
+  --r-lg: 14px;
+  --r-xl: 20px;
+
+  /* Elevation — soft, spruce-tinted */
+  --shadow-card: 0 1px 2px rgba(30, 58, 52, 0.04), 0 1px 3px rgba(30, 58, 52, 0.05);
+  --shadow-raised: 0 6px 16px rgba(30, 58, 52, 0.08), 0 2px 6px rgba(30, 58, 52, 0.05);
+  --shadow-pop: 0 16px 40px rgba(30, 58, 52, 0.16), 0 4px 12px rgba(30, 58, 52, 0.08);
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--spruce);
+  font-family: var(--font-ui);
+  font-size: 15px;
+  line-height: 1.45;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+/* Tabular figures — mandatory for all metrics (spec §8) */
+.tnum {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: 'tnum' 1;
+}
+
+.font-display {
+  font-family: var(--font-display);
+  letter-spacing: -0.01em;
+}
+
+/* Accessibility floor: visible focus states */
+:focus-visible {
+  outline: 2px solid var(--glacier);
+  outline-offset: 2px;
+  border-radius: 3px;
+}
+*:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* Thin, unobtrusive scrollbars in scroll regions */
+.scroll-quiet {
+  scrollbar-width: thin;
+  scrollbar-color: var(--line-strong) transparent;
+}
+.scroll-quiet::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+.scroll-quiet::-webkit-scrollbar-thumb {
+  background: var(--line-strong);
+  border-radius: 999px;
+  border: 3px solid var(--paper);
+}
+
+/* Reduced motion respected */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ============================================================
+   Print — the Family Summary is the "money screen" (spec §4.3)
+   ============================================================ */
+.print-only {
+  display: none;
+}
+@media print {
+  @page {
+    margin: 0.7in;
+  }
+  html,
+  body {
+    background: #ffffff !important;
+  }
+  .no-print {
+    display: none !important;
+  }
+  .print-only {
+    display: block !important;
+  }
+  .print-page {
+    box-shadow: none !important;
+    border: none !important;
+  }
+}
