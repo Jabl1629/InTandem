@@ -144,4 +144,21 @@ body {
     box-shadow: none !important;
     border: none !important;
   }
+
+  /* EMR progress-note leave-behind: print only the tagged note(s). */
+  body.emr-printing * {
+    visibility: hidden !important;
+  }
+  body.emr-printing .emr-print,
+  body.emr-printing .emr-print * {
+    visibility: visible !important;
+  }
+  body.emr-printing .emr-print {
+    position: absolute;
+    inset: 0;
+    padding: 24px;
+  }
+  body.emr-printing .emr-print .no-print {
+    display: none !important;
+  }
 }

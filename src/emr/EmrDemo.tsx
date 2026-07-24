@@ -350,6 +350,14 @@ export function EmrDemo() {
     fireScenario('S2')
   }
 
+  const printNotes = () => {
+    document.body.classList.add('emr-printing')
+    const cleanup = () => document.body.classList.remove('emr-printing')
+    window.addEventListener('afterprint', cleanup, { once: true })
+    window.print()
+    setTimeout(cleanup, 1000)
+  }
+
   // When a note posts, nudge attention to the Progress Notes tab.
   useEffect(() => {
     if (status === 'completed') setTab('notes')
@@ -456,13 +464,24 @@ export function EmrDemo() {
 
               {tab === 'notes' && (
                 <>
-                  <h2 className="mb-3 text-base font-semibold" style={{ color: INK }}>Progress Notes</h2>
+                  <div className="mb-3 flex items-center justify-between">
+                    <h2 className="text-base font-semibold" style={{ color: INK }}>Progress Notes</h2>
+                    {notes.length > 0 && (
+                      <button
+                        onClick={printNotes}
+                        className="no-print rounded border px-3 py-1.5 text-sm font-medium"
+                        style={{ borderColor: LINE, color: BLUE }}
+                      >
+                        Print / save PDF
+                      </button>
+                    )}
+                  </div>
                   {notes.length === 0 ? (
                     <div className="rounded border border-dashed bg-white p-8 text-center text-sm" style={{ borderColor: LINE, color: SUB }}>
                       No notes yet. Sign a medication order to generate a family-notification note.
                     </div>
                   ) : (
-                    <div className="space-y-3">
+                    <div className="emr-print space-y-3">
                       {notes.map((n) => (
                         <ProgressNote key={n.id} note={n} />
                       ))}
