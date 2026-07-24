@@ -11,6 +11,8 @@ Built to be projected in a room and iterated on live with the care team. **All
 data is fictional and seeded — no backend, no real device ingestion, not a
 medical device.**
 
+**▶ Live demo: https://jabl1629.github.io/InTandem/**
+
 ---
 
 ## The four surfaces
@@ -69,6 +71,13 @@ npm run dev      # http://localhost:5199
 The seed is deterministic (seeded RNG), so the demo renders identically on every
 load. Session edits (captured decisions, action items, answered questions)
 persist to `localStorage`; **"Reset demo data"** in the footer restores the seed.
+
+## Deploying
+
+Hosted on **GitHub Pages** and **auto-deploys on every push to `main`** via
+`.github/workflows/deploy.yml` — edit, commit, `git push`, and the change is
+live at the URL above in about a minute. Routing uses `HashRouter` so deep links
+survive a refresh on Pages; the Vite `base` is `/InTandem/` for production builds.
 
 ## Stack
 
