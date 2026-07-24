@@ -27,10 +27,6 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm run build
-      # Auto-enables Pages (GitHub Actions source) on the first run.
-      - uses: actions/configure-pages@v5
-        with:
-          enablement: true
       - uses: actions/upload-pages-artifact@v3
         with:
           path: dist
