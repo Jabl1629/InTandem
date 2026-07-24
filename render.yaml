@@ -1,0 +1,24 @@
+# Render blueprint for the InTandem EMR demo backend.
+# Connect this repo in the Render dashboard (New → Blueprint) and set the
+# secret env vars there — they are intentionally NOT stored in the repo.
+services:
+  - type: web
+    name: intandem-emr-backend
+    runtime: node
+    rootDir: server
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /api/health
+    autoDeploy: true
+    envVars:
+      - key: ELEVENLABS_API_KEY
+        sync: false
+      - key: ELEVENLABS_AGENT_ID
+        sync: false
+      - key: ELEVENLABS_PHONE_NUMBER_ID
+        sync: false
+      - key: DEFAULT_TARGET_PHONE
+        sync: false
+      - key: ALLOWED_ORIGINS
+        value: https://jabl1629.github.io

@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { CONTACT, FACILITY, RESIDENT, SCENARIOS } from './constants'
 import type { PostedNote } from './emrStore'
 import { useEmr } from './emrStore'
+import { useEmrEvents } from './useEmrEvents'
 
 // ── Demo EHR palette (deliberately generic enterprise blues/grays) ──
 const NAVY = '#1f3a5f'
@@ -323,6 +324,7 @@ function Toast() {
 
 // ── Main ──
 export function EmrDemo() {
+  useEmrEvents()
   const [view, setView] = useState<'census' | 'chart'>('census')
   const [tab, setTab] = useState<'orders' | 'notes'>('orders')
   const [adding, setAdding] = useState(false)
