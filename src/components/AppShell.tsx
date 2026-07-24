@@ -77,8 +77,8 @@ export function AppShell() {
 
   const onReset = () => {
     resetDemo()
-    // Clear any live-session UI state cleanly.
-    window.location.href = '/'
+    // Full reload at the app root (base-aware for GitHub Pages) → clean slate.
+    window.location.href = import.meta.env.BASE_URL
   }
 
   return (

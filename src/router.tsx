@@ -1,4 +1,4 @@
-import { createBrowserRouter } from 'react-router-dom'
+import { createHashRouter } from 'react-router-dom'
 import { AppShell } from '@/components/AppShell'
 import { RoundingBoard } from '@/views/RoundingBoard'
 import { ResidentConference } from '@/views/ResidentConference'
@@ -6,7 +6,9 @@ import { ConferenceMode } from '@/views/ConferenceMode'
 import { FamilyView } from '@/views/FamilyView'
 import { FamilySummaryPage } from '@/views/FamilySummaryPage'
 
-export const router = createBrowserRouter([
+// HashRouter so deep links (e.g. /resident/eleanor) survive a refresh on
+// GitHub Pages without any server-side SPA fallback.
+export const router = createHashRouter([
   {
     path: '/',
     element: <AppShell />,
