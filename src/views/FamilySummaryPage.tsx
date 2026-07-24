@@ -24,7 +24,7 @@ export function FamilySummaryPage() {
       <div className="flex h-full items-center justify-center bg-paper text-slate">
         <div className="text-center">
           <p>Summary not found.</p>
-          <button onClick={() => navigate('/')} className="mt-3 text-sm text-glacier">
+          <button onClick={() => navigate('/huddle')} className="mt-3 text-sm text-glacier">
             ← Rounding Board
           </button>
         </div>
@@ -37,14 +37,14 @@ export function FamilySummaryPage() {
       {/* Action bar (screen only) */}
       <div className="no-print mx-auto mb-4 flex max-w-3xl items-center justify-between px-6">
         <button
-          onClick={() => navigate(`/resident/${resident.id}`)}
+          onClick={() => navigate(`/huddle/resident/${resident.id}`)}
           className="text-sm text-slate hover:text-spruce"
         >
           ← Back to {resident.name.split(' ')[0]}
         </button>
         <div className="flex gap-2">
           <button
-            onClick={() => navigate(`/family/${resident.id}`)}
+            onClick={() => navigate(`/huddle/family/${resident.id}`)}
             className="rounded-md border bg-paper-raised px-3 py-1.5 text-sm font-medium text-glacier-ink hover:bg-paper"
           >
             Preview family view

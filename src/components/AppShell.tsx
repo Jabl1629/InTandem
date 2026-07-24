@@ -12,7 +12,7 @@ import { statusClasses } from '@/lib/status'
 function RailResident({ id, name, careLevel, dot }: { id: string; name: string; careLevel: string; dot: string }) {
   return (
     <NavLink
-      to={`/resident/${id}`}
+      to={`/huddle/resident/${id}`}
       className={({ isActive }) =>
         `group flex items-center gap-2.5 rounded-md px-2.5 py-1.5 text-sm transition-colors ${
           isActive ? 'bg-paper-sunken text-spruce' : 'text-slate hover:bg-paper-sunken/60 hover:text-spruce'
@@ -30,12 +30,12 @@ function ViewAsToggle() {
   const location = useLocation()
   const navigate = useNavigate()
   const params = useParams()
-  const onFamily = location.pathname.startsWith('/family/')
+  const onFamily = location.pathname.startsWith('/huddle/family/')
   const residentId = params.id
 
   const go = (family: boolean) => {
     if (!residentId) return
-    navigate(family ? `/family/${residentId}` : `/resident/${residentId}`)
+    navigate(family ? `/huddle/family/${residentId}` : `/huddle/resident/${residentId}`)
   }
 
   return (
@@ -77,8 +77,8 @@ export function AppShell() {
 
   const onReset = () => {
     resetDemo()
-    // Full reload at the app root (base-aware for GitHub Pages) → clean slate.
-    window.location.href = import.meta.env.BASE_URL
+    // Full reload at the Huddle home (base-aware for GitHub Pages) → clean slate.
+    window.location.href = `${import.meta.env.BASE_URL}#/huddle`
   }
 
   return (
@@ -93,7 +93,7 @@ export function AppShell() {
 
         <nav className="flex-1 overflow-y-auto scroll-quiet px-3">
           <NavLink
-            to="/"
+            to="/huddle"
             end
             className={({ isActive }) =>
               `flex items-center gap-2.5 rounded-md px-2.5 py-2 text-sm font-medium transition-colors ${

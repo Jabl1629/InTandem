@@ -286,7 +286,7 @@ export function CommitmentsZone({
 
   const start = () => {
     if (!live || live.residentId !== resident.id) startConference(resident.id)
-    navigate(`/resident/${resident.id}/conference`)
+    navigate(`/huddle/resident/${resident.id}/conference`)
   }
 
   return (

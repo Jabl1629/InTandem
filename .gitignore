@@ -6,6 +6,14 @@ dist-ssr
 .vite
 coverage
 
+# Secrets / backend env — never commit (repo is public)
+.env
+.env.*
+!.env.example
+
+# Sensitive handoff doc — contains a real phone number; repo is public
+docs/demo-build-handoff-claude-code.md
+
 # Editor
 .vscode/*
 !.vscode/extensions.json

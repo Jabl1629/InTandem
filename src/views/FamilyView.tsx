@@ -151,7 +151,7 @@ export function FamilyView() {
         <>
           <SectionTitle>Your latest summary</SectionTitle>
           <Link
-            to={`/summary/${latestSummary.id}`}
+            to={`/huddle/summary/${latestSummary.id}`}
             className="flex items-center justify-between rounded-lg border border-l-4 border-l-glacier bg-glacier-wash px-4 py-3"
           >
             <div>

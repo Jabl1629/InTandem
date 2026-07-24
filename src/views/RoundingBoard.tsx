@@ -120,7 +120,7 @@ export function RoundingBoard() {
         return (
           <button
             key={r.id}
-            onClick={() => navigate(`/resident/${r.id}`)}
+            onClick={() => navigate(`/huddle/resident/${r.id}`)}
             className="mb-3 flex w-full items-center gap-3 rounded-lg border border-l-4 border-l-alert bg-alert-wash px-4 py-3 text-left transition-shadow hover:shadow-card"
           >
             <span className="text-alert" aria-hidden>
@@ -165,7 +165,7 @@ export function RoundingBoard() {
               return (
                 <tr
                   key={r.id}
-                  onClick={() => navigate(`/resident/${r.id}`)}
+                  onClick={() => navigate(`/huddle/resident/${r.id}`)}
                   className="cursor-pointer border-b last:border-0 transition-colors hover:bg-paper-sunken/50"
                 >
                   <td className="py-3 pl-4 tnum text-slate-soft">{i + 1}</td>

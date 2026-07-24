@@ -78,7 +78,7 @@ export function ConferenceMode() {
     if (!live || !liveConf) return
     const input = buildSummaryInput(resident, assessment, liveConf, residentActionItems, questions, agenda, checked)
     const summary = endConference(input)
-    navigate(`/summary/${summary.id}`)
+    navigate(`/huddle/summary/${summary.id}`)
   }
 
   return (
@@ -97,7 +97,7 @@ export function ConferenceMode() {
             {fmtElapsed(elapsed)}
           </span>
           <button
-            onClick={() => navigate(`/resident/${resident.id}`)}
+            onClick={() => navigate(`/huddle/resident/${resident.id}`)}
             className="rounded-md border px-3 py-1.5 text-sm font-medium text-slate hover:bg-paper-sunken"
           >
             Exit

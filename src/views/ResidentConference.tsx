@@ -39,7 +39,7 @@ export function ResidentConference() {
 
   return (
     <div className="mx-auto max-w-shell px-7 py-6">
-      <Link to="/" className="mb-3 inline-flex items-center gap-1 text-sm text-slate hover:text-spruce">
+      <Link to="/huddle" className="mb-3 inline-flex items-center gap-1 text-sm text-slate hover:text-spruce">
         ← Rounding Board
       </Link>
 

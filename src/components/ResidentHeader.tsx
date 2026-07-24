@@ -60,7 +60,7 @@ export function ResidentHeader({ resident, assessment }: { resident: Resident; a
             The sensors are proposing an off-cycle conference.
           </span>
           <button
-            onClick={() => navigate(`/resident/${resident.id}/conference`)}
+            onClick={() => navigate(`/huddle/resident/${resident.id}/conference`)}
             className="ml-auto rounded-md bg-alert px-3.5 py-1.5 text-sm font-semibold text-white transition-opacity hover:opacity-90"
           >
             Schedule significant-change conference →
