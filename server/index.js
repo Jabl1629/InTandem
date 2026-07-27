@@ -48,6 +48,11 @@ function broadcast(event) {
   for (const res of clients) res.write(`data: ${payload}\n\n`)
 }
 
+// Friendly root so hitting the base URL isn't a bare "Cannot GET /".
+app.get('/', (_req, res) =>
+  res.json({ service: 'intandem-emr-backend', ok: true, mode: LIVE ? 'live' : 'mock', health: '/api/health' }),
+)
+
 app.get('/api/health', (_req, res) => res.json({ ok: true, mode: LIVE ? 'live' : 'mock' }))
 
 app.get('/api/events', (req, res) => {

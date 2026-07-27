@@ -21,4 +21,4 @@ services:
       - key: DEFAULT_TARGET_PHONE
         sync: false
       - key: ALLOWED_ORIGINS
-        value: https://jabl1629.github.io
+        value: https://jabl1629.github.io,http://localhost:5199
