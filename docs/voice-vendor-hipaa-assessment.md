@@ -92,7 +92,46 @@ What this buys in the room: when someone asks *"what about privacy — this is h
 
 ---
 
-## 7. Confirm before signing
+## 7. 🚩 Landmines — vendors that market HIPAA but won't sign
+
+A vendor's unilateral "we're HIPAA compliant" is **legally worthless to you**. 45 CFR §164.502(e) requires an *executed BAA*. These all advertise compliance while failing that test:
+
+| Vendor | The trap |
+|---|---|
+| **Together AI** | Says it uses *"BAAs **with our partners**"* — those are *their* vendors, not you. Their BAA URL **404s**; privacy policy never mentions PHI. |
+| **Fireworks AI** | Markets "HIPAA compliant" in blog + current docs — **never mentions BAAs anywhere**, no HIPAA tier in pricing. |
+| **Speechmatics** | Four separate pages assert "fully HIPAA compliant" — **not one contains the words "Business Associate Agreement."** |
+| **Telnyx** | Argues it *doesn't need* a BAA under the "conduit exception" — but that exception requires no more than *incidental* access to content, and live STT + LLM + recording is exactly content access. Their AUP also restricts calls that aren't *"uninterrupted live human voice dialog… between natural human beings"* — read literally, that prohibits this product. |
+| **⚠️ Google AI Studio (vs Vertex)** | **Same models, same API shape — but outside the BAA.** Google's binding instruction is to not use products *"not explicitly covered by the BAA"* with PHI, and free-tier AI Studio content is *"used to improve our products."* **The single easiest way to ship an accidentally-illegal product.** Use Vertex, never the AI Studio key path. |
+| **Groq free tier** | Real published BAA, but Covered Services exclude anything *"provided for free or at no additional charge."* Prototyping with PHI on the free tier is uncovered. |
+| **AWS Bedrock** | Eligible *"[excluding Fable and Mythos models]"* — an unpinned model-fallback chain can silently exit HIPAA scope mid-request. **Pin model IDs.** |
+| **Anthropic (counterintuitive)** | **ZDR is *disqualifying*, not required** — Covered Models *"require 30-day data retention and aren't available with zero data retention enabled."* Opposite of ElevenLabs. Relevant to the Steady coach on Haiku 4.5 — confirm it's a current Covered Model. |
+| **PlayAI / PlayHT** | **Company is gone** — Meta acquihired the team July 2025; both domains fail DNS. Cross it off any list. |
+| **Vocode** | Dead — last commit Nov 2024, pricing page redirects to GitHub. Not viable for a regulated build. |
+
+## 8. If you ever assemble it yourself
+
+A DIY pipeline runs **~$0.04–$0.05/min** vs Retell's $0.13–0.17 — but the savings are dominated by **fixed BAA floors**, not per-minute rates: LiveKit $500/mo, Daily $500/mo, SignalWire $100/mo + $1k usage minimum, Plivo $1k/mo, Twilio an unpriced "Security Edition."
+
+**The only four vendors offering a solo founder a genuine no-sales-call BAA:** AssemblyAI (STT, self-serve on any paid account, +$0.15/hr Medical Mode), AWS (Bedrock + Polly, via Artifact), Google Cloud (Vertex + TTS), and Groq (paid tier only).
+
+Cheapest defensible stack: **self-hosted Pipecat** (BSD-2 — needs no SFU/TURN/Redis on the Twilio-WebSocket transport, so *no orchestration BAA at all*) + Twilio Voice/Media Streams + AssemblyAI + Bedrock/Vertex + Polly Neural.
+
+> **When to revisit:** the DIY path saves ~$0.10/min. Against a few weeks of founder time, it doesn't pay back until roughly **150,000+ call-minutes/year**. Nowhere near that pre-revenue. **Stay on Retell.**
+
+Resolved along the way: Twilio's official HIPAA-eligible list (updated Jun 30 2026) **does** include Media Streams, ConversationRelay, Call Recording, and SIP trunking — but all still sit behind the sales-gated Security Edition. Also note **LiveKit's own phone numbers are inbound-only**; outbound requires a BYO SIP trunk, so you'd pay LiveKit *on top of* a carrier.
+
+## 9. TCPA — now concrete
+
+Per the **FCC Declaratory Ruling of Feb 8, 2024**, TCPA's "artificial or prerecorded voice" rules **apply to AI-generated voices** in outbound calls. Three obligations:
+
+1. **Prior express consent** — the operational gap. This is a **facility-onboarding** requirement (capture consent from the responsible party), not a technical one.
+2. **Identification of the responsible entity** — ✅ our agent's opener already does this (*"the care team's automated assistant calling from Frasier — I'm an AI, and this call is recorded"*).
+3. **Opt-out** — required for telemarketing. Whether care-notification calls to a designated contact count as telemarketing (and whether healthcare-message exemptions apply) is a **genuine legal question for counsel**, not something to assume either way.
+
+Note: **10DLC is SMS-only and does not apply to voice.** For outbound voice the relevant regimes are STIR/SHAKEN and branded caller ID — which is what the Twilio Trust Hub / Voice Integrity work already in flight addresses.
+
+## 10. Confirm before signing
 
 1. **Retell's subprocessor list in writing**, and which LLM/TTS providers are BAA-covered. Their pricing page markets "custom compliance terms" under Enterprise, which contradicts their docs — resolve in writing.
 2. **Vapi** (if reconsidered): pricing page currently says $2,000/mo HIPAA + $1,000/mo ZDR; older sources say $1,000. HIPAA mode and ZDR appear mutually exclusive.
