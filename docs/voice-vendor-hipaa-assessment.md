@@ -78,7 +78,7 @@ Our six extraction fields map onto Retell's four custom-analysis types (Text/Sel
 
 ## 5. Two traps
 
-**Don't bring the 833 number to the new platform via SIP.** Twilio signs BAAs only on **Security or Enterprise Edition** — a self-serve Twilio account is *not* BAA-covered. Porting our own number in makes us the Twilio customer again and re-inherits that gate. **Use the platform's managed numbers** so their BAA covers the telephony leg.
+**Don't bring our existing toll-free number to the new platform via SIP.** Twilio signs BAAs only on **Security or Enterprise Edition** — a self-serve Twilio account is *not* BAA-covered. Porting our own number in makes us the Twilio customer again and re-inherits that gate. **Use the platform's managed numbers** so their BAA covers the telephony leg.
 
 **⚠️ TCPA may exceed HIPAA as the legal risk.** The FCC treats AI-generated voices in outbound calls as *"artificial."* For a product that calls residents' family members, this is potentially larger exposure than the BAA question — and it's **not** solved by any vendor choice. Likely mitigation is prior express consent from the responsible party, captured at facility onboarding. **Raise with counsel** alongside the open Steady review.
 
