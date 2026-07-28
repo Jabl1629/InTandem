@@ -99,7 +99,8 @@ The **S3a → S3b** pair is the emotional peak: the system made a promise and ke
 |---|---|
 | First call is slow / nothing happens | Cold start — hit `/api/health`, wait for a response, retry |
 | Status pill says `mock` | API key not read → check Render → Environment → `ELEVENLABS_API_KEY` |
-|  Backend asleep or URL typo.d. Load the health URL directly | Backend asleep or URL typo'd. Load the health URL directly |
+| Status pill says `unreachable` | Backend asleep. **Click the pill to re-check**, or load the health URL directly and wait ~50s |
+| Status pill says `simulation` | The Backend URL field was cleared. Re-enter it → **Save & connect** |
 | Phone doesn't ring | Target phone must be **E.164** (`+1…`, no spaces/dashes/parens) |
 | Note renders with blank fields | ElevenLabs agent's data-collection field IDs don't match — see below |
 | Everything is broken | Console → **Reset demo**. Worst case, fall back to simulation mode (blank the Backend URL) — no calls, but the full on-screen flow still runs |
