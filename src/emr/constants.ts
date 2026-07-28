@@ -64,6 +64,30 @@ export interface Scenario {
 const fm = (mid: string) =>
   `Hi, this is the care team's automated assistant calling from ${FACILITY.name} — I'm an AI, and this call is recorded. ${mid} Is this ${CONTACT.first}?`
 
+export interface VitalReading {
+  label: string
+  daysAgo: number
+  time: string
+  systolic: number
+  diastolic: number
+  pulse: number
+}
+
+/**
+ * Margaret's recent blood pressures. SINGLE SOURCE OF TRUTH — rendered in the
+ * chart's Vitals tab and quoted verbatim by the agent in S2. If these change,
+ * update the S2 `facts` block to match, or the projector and the phone call
+ * will disagree in front of the room.
+ */
+export const RECENT_VITALS: VitalReading[] = [
+  { label: 'Yesterday', daysAgo: 1, time: '07:12', systolic: 140, diastolic: 82, pulse: 76 },
+  { label: '2 days ago', daysAgo: 2, time: '07:05', systolic: 162, diastolic: 92, pulse: 81 },
+  { label: '3 days ago', daysAgo: 3, time: '06:58', systolic: 155, diastolic: 90, pulse: 78 },
+]
+
+/** Her documented usual range, for contrast on the chart and in the call. */
+export const BP_BASELINE = '130/80'
+
 export const SCENARIOS: Record<string, Scenario> = {
   // ── S2 — HERO ──────────────────────────────────────────────────────────
   S2: {
@@ -92,7 +116,25 @@ THE MEDICATION
 - Ordered by Dr. Alan Reyes
 
 WHY
-Her blood pressure has been running higher than her usual range over the past week.
+Her blood pressure has been running above her usual range over the past week.
+
+THE NUMBERS — her three most recent readings, recorded by nursing
+- Yesterday: 140 over 82
+- Two days ago: 162 over 92
+- Three days ago: 155 over 90
+Her usual range is around 130 over 80.
+
+HOW TO USE THE NUMBERS
+State them exactly as written. Say them as "140 over 82." Do not round, average,
+generalize to "the 160s," or describe a trend the readings do not show. If you are
+asked for a reading you do not have above, say you only have the last three and
+offer the nurse callback.
+
+IF ASKED "YESTERDAY WAS 140 OVER 82 — WHY START A MEDICATION?"
+That is a fair question. Yesterday's reading was the best of the three, and it is
+still above her usual range. Dr. Reyes based the decision on the pattern across the
+week rather than any single reading. Anything further about that clinical judgment
+is for the nurse or Dr. Reyes — offer the callback.
 
 IS THIS AN EMERGENCY? — NO
 Routine adjustment. No fall, no injury, no symptoms. She is comfortable and her routine is unchanged.
@@ -108,7 +150,11 @@ Side-effect lists, interactions, whether she should be on it, prognosis.`,
       { speaker: 'contact', text: `Yes, this is Susan.` },
       { speaker: 'assistant', text: `Thank you. Dr. Reyes reviewed Margaret's blood pressure during rounds this morning and started a new blood pressure medication — lisinopril, five milligrams, once a day. It starts with this evening's medication pass.` },
       { speaker: 'contact', text: `Okay — is everything alright? Did something happen?` },
-      { speaker: 'assistant', text: `No emergency at all. Her blood pressure has just been running a little higher than usual this past week, so this is a routine adjustment. There was no fall and no symptoms — she's comfortable, and her day is unchanged.` },
+      { speaker: 'assistant', text: `No emergency at all. Her blood pressure has been running above her usual range this past week, so this is a routine adjustment. There was no fall and no symptoms — she's comfortable, and her day is unchanged.` },
+      { speaker: 'contact', text: `What have her numbers actually been?` },
+      { speaker: 'assistant', text: `Her three most recent readings were 140 over 82 yesterday, 162 over 92 two days ago, and 155 over 90 three days ago. Her usual range is around 130 over 80.` },
+      { speaker: 'contact', text: `But yesterday was 140 over 82 — that doesn't sound alarming. Why start a medication?` },
+      { speaker: 'assistant', text: `That's a fair question. Yesterday was the best of the three, and it's still above her usual range. Dr. Reyes based the decision on the pattern across the week rather than any single day. If you'd like to talk that reasoning through with him or with a nurse, I can arrange a callback.` },
       { speaker: 'contact', text: `Alright. What will you be keeping an eye on?` },
       { speaker: 'assistant', text: `Nursing will check her blood pressure daily for the next week and watch for any dizziness when she stands up. If you'd like to talk through the medication itself, I can have a nurse call you back.` },
       { speaker: 'contact', text: `No, that's alright. Thank you for letting me know.` },
@@ -120,7 +166,7 @@ Side-effect lists, interactions, whether she should be on it, prognosis.`,
       acknowledgment_received: true,
       nurse_callback_requested: false,
       summary_for_chart:
-        'New medication started: lisinopril 5 mg PO daily (Dr. Reyes), for blood pressure running above her usual range. Routine, non-emergent. Nursing to check BP daily × 1 week and monitor for orthostatic dizziness. No other changes to medications, diet, activity, room, or level of care.',
+        'New medication started: lisinopril 5 mg PO daily (Dr. Reyes), for blood pressure running above her usual range (recent readings 140/82, 162/92, 155/90; baseline ~130/80). Routine, non-emergent. Daughter asked for specific readings and why treatment was started given yesterday’s improved value; explained the decision was based on the week’s pattern and offered a nurse callback, which she declined. Nursing to check BP daily × 1 week and monitor for orthostatic dizziness. No other changes to medications, diet, activity, room, or level of care.',
     },
   },
 

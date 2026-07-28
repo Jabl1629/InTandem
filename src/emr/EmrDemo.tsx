@@ -1,6 +1,13 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { CONTACT, FACILITY, RESIDENT, SCENARIOS } from './constants'
+import { BP_BASELINE, CONTACT, FACILITY, RECENT_VITALS, RESIDENT, SCENARIOS } from './constants'
+
+/** Chart dates render relative to the real today so the demo always looks current. */
+function dateFor(daysAgo: number): string {
+  const d = new Date()
+  d.setDate(d.getDate() - daysAgo)
+  return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
+}
 import type { PostedNote } from './emrStore'
 import { useEmr } from './emrStore'
 import { useEmrEvents } from './useEmrEvents'
@@ -326,7 +333,7 @@ function Toast() {
 export function EmrDemo() {
   useEmrEvents()
   const [view, setView] = useState<'census' | 'chart'>('census')
-  const [tab, setTab] = useState<'orders' | 'notes'>('orders')
+  const [tab, setTab] = useState<'orders' | 'notes' | 'vitals'>('orders')
   const [adding, setAdding] = useState(false)
   const [signed, setSigned] = useState(false)
 
@@ -398,12 +405,12 @@ export function EmrDemo() {
             {/* Chart nav */}
             <nav className="w-44 shrink-0 border-r bg-white py-2" style={{ borderColor: LINE }}>
               {NAV.map((n) => {
-                const active = (n.id === 'orders' && tab === 'orders') || (n.id === 'notes' && tab === 'notes')
-                const clickable = n.id === 'orders' || n.id === 'notes'
+                const active = n.id === tab
+                const clickable = n.id === 'orders' || n.id === 'notes' || n.id === 'vitals'
                 return (
                   <button
                     key={n.id}
-                    onClick={() => clickable && setTab(n.id as 'orders' | 'notes')}
+                    onClick={() => clickable && setTab(n.id as 'orders' | 'notes' | 'vitals')}
                     className={`flex w-full items-center justify-between px-4 py-2 text-left text-sm ${clickable ? '' : 'cursor-default opacity-50'}`}
                     style={active ? { background: '#e8eef5', color: BLUE, fontWeight: 600, boxShadow: `inset 3px 0 0 ${BLUE}` } : { color: INK }}
                   >
@@ -487,6 +494,49 @@ export function EmrDemo() {
                       ))}
                     </div>
                   )}
+                </>
+              )}
+
+              {tab === 'vitals' && (
+                <>
+                  <div className="mb-3 flex items-baseline justify-between">
+                    <h2 className="text-base font-semibold" style={{ color: INK }}>Vitals — Blood Pressure</h2>
+                    <span className="text-xs" style={{ color: SUB }}>
+                      Documented baseline: {BP_BASELINE}
+                    </span>
+                  </div>
+                  <div className="overflow-hidden rounded border bg-white" style={{ borderColor: LINE }}>
+                    <table className="w-full text-sm">
+                      <thead>
+                        <tr style={{ background: '#f4f6f9', color: SUB }}>
+                          <th className="px-3 py-2 text-left font-semibold">Date</th>
+                          <th className="px-3 py-2 text-left font-semibold">Time</th>
+                          <th className="px-3 py-2 text-left font-semibold">Blood pressure</th>
+                          <th className="px-3 py-2 text-left font-semibold">Pulse</th>
+                          <th className="px-3 py-2 text-left font-semibold">Flag</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {RECENT_VITALS.map((v) => (
+                          <tr key={v.daysAgo} className="border-t" style={{ borderColor: LINE }}>
+                            <td className="px-3 py-2">
+                              {dateFor(v.daysAgo)} <span style={{ color: SUB }}>· {v.label}</span>
+                            </td>
+                            <td className="px-3 py-2" style={{ color: SUB }}>{v.time}</td>
+                            <td className="px-3 py-2 font-semibold tabular-nums">
+                              {v.systolic}/{v.diastolic}
+                            </td>
+                            <td className="px-3 py-2 tabular-nums" style={{ color: SUB }}>{v.pulse}</td>
+                            <td className="px-3 py-2" style={{ color: '#b3402f' }}>↑ Above baseline</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                  <p className="mt-3 text-xs" style={{ color: SUB }}>
+                    These are the readings Dr. Reyes reviewed before ordering. The automated family call
+                    quotes them verbatim — the chart and the call are the same record.
+                  </p>
                 </>
               )}
             </main>
