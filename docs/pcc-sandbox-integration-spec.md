@@ -18,8 +18,10 @@ The form asks: company, website, address, employee count (buckets start at "1 to
 It does **not** ask for revenue, references, SOC 2, or a security questionnaire. The real gate is qualitative and happens *after* intake.
 
 **Two consequences:**
-- **Category fit is a real gate.** PCC told Real Time Medical Systems there was no marketplace category fit. Pick a live one deliberately — *Resident & Family Engagement*, *Care Coordination*, *Point of Care*, and *Risk Management* all exist, with AI monitoring vendors (Nobi, Circadia, Neteera) already listed.
+- **Category fit is a real gate — and it resolves fast.** PCC told Real Time Medical Systems *"within about a week"* that no category fit. Pick a live one deliberately — *Resident & Family Engagement*, *Care Coordination*, *Point of Care*, and *Risk Management* all exist, with AI monitoring vendors (Nobi, Circadia, Neteera) already listed. **A one-week answer makes applying cheap information, not a commitment.**
 - **Name Frasier on the form.** "Do we have a mutual customer?" is asked up-front for a reason.
+
+> ⚠️ **Ignore the timeline/cost figures published by integration consultancies** ("4–6 months," "$75,000–$250,000"). Those describe *a facility deploying PCC as a customer* — not a vendor becoming a partner. There is **no** public first-hand account of PCC partner onboarding duration anywhere: zero on Hacker News, Reddit, blogs, podcasts, or conference talks. That silence is itself a signal.
 
 ---
 
@@ -110,6 +112,27 @@ It binds **your whole company**, not just the integrated app. Real Time refused 
 
 *(Note the asymmetry: §14 is barred by 170.404 for the **certified** API — Path A. It is enforceable on Path B.)*
 
+### 📉 The ROI reality — the only publicly-dated partner case
+**PainChek (ASX:PCK)** is the one vendor with a traceable timeline, because securities filings forced disclosure:
+- Signed the marketplace agreement **Oct 2022**, targeting integration "during Q4 CY2022."
+- First live customers **May 2023** — a ~3× slip on their own estimate (**~7 months** signature → live).
+- **Two years post-signature: five facilities.** ("being used across five Canadian aged care facilities," unchanged across two consecutive quarterlies.)
+- They have since diversified to Eldermark, Yardi, MatrixCare, ALIS, and AlayaCare.
+
+**Marketplace listing is not a distribution channel.** You still sell every facility yourself — while paying per-facility fees and honoring a take-or-pay minimum. That is the case *for* Path A, made by someone else's money.
+
+### 🚩 Blocker 3 — the liability asymmetry
+**§12.2 / Developer Terms §8.4:** PCC's liability caps at fees paid *"or, if no fees apply, **$1,000**"* — against your **uncapped indemnity** (§13.1). One-sided by roughly infinity.
+
+Also: **§9 expressly reserves PCC's right to build your product.** And **Appendix A** boxes you into a single narrow "Authorized Use Case" with explicit exclusions (the signed example bars coordinating care with *"acute care or ambulatory care settings, healthcare plans, payers, or intermediary vendors"*).
+
+### Data ownership — no training rights
+**§8.1:** data in PCC software *"**and any reports or data derived by processing such data, will be owned by PointClickCare**."* **§8.2** limits your use to contract performance, express permissions, third-party agreements, and *"internal administrative purposes related to treatment, payment, and healthcare operations."*
+
+Training a model is arguably none of those four. Read as **no training rights on PCC-sourced data** absent an express amendment. Tellingly, PCC's own **Ambient Scribe Addendum** (Mar 2026, powered by Nabla) claims exactly that right *for itself* — to *"tune, enhance and improve"* and to *"retain, use and disclose … de-identified or anonymized data during and after termination."* PCC reserves the right it is unlikely to grant you.
+
+*(Also: Developer Terms §2.2(o) prohibits using the API to "benchmark performance or functionality.")*
+
 ### Other terms to price in
 - **Mandatory customer sponsor** — a **Letter of Authorization** from a facility before PCC enables anything.
 - **You report your sales pipeline to PCC** — monthly reports incl. *"active and prospective customers, forecasting, strategy."* You are handing commercial intelligence to a potential competitor.
@@ -153,9 +176,15 @@ Revisit Path B only when there is enough revenue to absorb a minimum commitment 
 
 ## 6. Still unknown — ask PCC directly
 
+**Negotiating lever:** the **$65 per App per Facility per Month** figure is published on `fhir.pointclickcare.com` as a **regulatorily-mandated fee disclosure** under §170.404 — yet PCC's *designated* mandatory-disclosures URL (`pointclickcare.com/company/certifications/`) carries no fee figure at all. If PCC quotes you materially above $65, **the published number is leverage.**
+
+**Worth $20 if this gets serious:** the RTMS district-court docket (D. Md. 8:24-cv-00313-PX) is on PACER at $0.10/page. The joint appendix contains deposition testimony on PCC's partner process and *unredacted* fee discussion — the only place the real numbers exist publicly.
+
 | Unknown | Notes |
 |---|---|
 | Current Marketplace per-facility fee | $65/$125 are 2023-era litigation figures; contractually confidential |
+| **App Validation Guidelines** | Incorporated by reference, non-public, **unilaterally changeable** — the single biggest unknown in the stack |
+| Your assigned **Authorized Use Case** + its exclusions | Appendix A; the binary gate. Ask before building |
 | The Minimum Integrations Commitment number | Redacted in the filing. **Negotiate to zero or defer** |
 | App Validation Guidelines | Not public — request |
 | USCDI Connector API Access Agreement text | Not public — request |
