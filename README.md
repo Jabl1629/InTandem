@@ -13,6 +13,10 @@ medical device.**
 
 **▶ Live demo: https://jabl1629.github.io/InTandem/**
 
+**▶ Running a demo? → [docs/DEMO-RUNBOOK.md](docs/DEMO-RUNBOOK.md)** — links, setup, run of show, and what to do when something breaks.
+
+The site hosts two demos: the **EMR Demo** (AI family notification, real outbound phone calls) and the **Huddle Dashboard Demo** (the care-conference dashboard described below).
+
 ---
 
 ## The four surfaces
