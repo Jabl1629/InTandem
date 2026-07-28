@@ -83,16 +83,42 @@ In *Real Time Medical Systems v. PointClickCare*, the **Fourth Circuit affirmed 
 
 Useful as leverage; not something a solo founder wants to litigate. Know it, don't lead with it.
 
-### The catch — is USCDI v1 even enough?
-PCC's FHIR support tracks **USCDI v1**. In sworn testimony, USCDI *and* the Marketplace API each supplied **under 30%** of what a clinical-analytics vendor needed. USCDI v1 has **no ADLs, no ambulation/activity data, no MDS, no structured falls data.**
+### ⚠️ Which USCDI version? — unresolved, and it changes the product
 
-For *this* product we need less than that — but the sleeper risk from v1 stands, and it is now the **first thing to test**:
+**v1 of this doc asserted USCDI v1. That is now in doubt.**
 
-> ### ⭐ The single question that gates everything
-> **Does the sandbox expose a usable responsible-party phone number** (`Patient.contact.telecom` / `RelatedPerson.telecom`)?
-> Without it there is no automated call trigger on Path A, no matter what else works. Cheap to test, and it determines the architecture.
+- PCC's public FHIR page still says *"in line with the **USCDI v1** data set"* and **US Core 3.1.1** (checked July 2026).
+- But **HTI-1 required certified health IT to move to USCDI v3 / US Core 6.1.0 by January 1, 2026**, *explicitly retiring USCDI v1 and US Core 3.1.1*. PCC recertified (g)(10) in **December 2025**.
 
-Also verify: is `MedicationRequest.reasonCode` populated? (drives the fact-completeness gate) · is room/bed retrievable?
+So PCC's certified API is very likely on **USCDI v3 / US Core 6.1.0** and the public page is simply stale. Treat the marketing page as unreliable on this point.
+
+**Why it matters more than anything else in this document:** US Core 6.1.0 adds **`RelatedPerson`** — *relationship, name, contact information, address*. Under v1 there is no related-person class at all, and the responsible party's phone is unavailable.
+
+| | USCDI v1 / US Core 3.1.1 | USCDI v3 / US Core 6.1.0 |
+|---|---|---|
+| Resource count | ~20 | ~26 |
+| `RelatedPerson` (family contact) | ❌ | ✅ |
+| Also adds | — | `Coverage`, `MedicationDispense`, `ServiceRequest`, `Specimen`, `Group` |
+
+### ⭐ First sandbox task — settle it in one request
+
+Any conformant FHIR server publishes an authoritative CapabilityStatement:
+
+```
+GET https://connect2.pointclickcare.com/fhir/R4/{tenantId}/metadata
+```
+
+That single response gives ground truth on the US Core version, every supported resource, every search parameter, and every operation. **Do this before writing any integration code.**
+
+Then verify, in order:
+1. **Is `RelatedPerson` present and actually populated** with a usable phone? (Presence in the IG ≠ populated by PCC.)
+2. Is `MedicationRequest.reasonCode` populated? (drives the fact-completeness gate)
+3. Is room/bed retrievable?
+
+**Design assumption regardless:** keep the one-time contact roster. Even if `RelatedPerson` is available, it tells you *a* relationship — not who the facility calls first, in what order, or with what consent. That is an operational decision FHIR does not model, and call consent (the TCPA requirement) is not in FHIR at all. Treat API contacts as onboarding friction removed, not as the foundation.
+
+### The other data catch — still real
+In sworn testimony, USCDI *and* the Marketplace API each supplied **under 30%** of what a clinical-analytics vendor needed. Neither version carries **ADLs, ambulation/activity data, MDS, or structured falls data**. For *this* product we need far less, but do not assume the API can support a future mobility/behavioral product.
 
 ---
 
