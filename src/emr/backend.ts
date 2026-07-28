@@ -1,24 +1,33 @@
 import { CONTACT, FACILITY, RESIDENT, type Scenario } from './constants'
 
 const LS_KEY = 'intandem_backend_url'
+/** Sentinel stored when the user deliberately clears the field. */
+const SIM = 'off'
 
-/** Backend base URL — runtime override (localStorage, set from the console)
- * wins over the build-time VITE_BACKEND_URL; empty = simulation mode. */
+/** The deployed demo backend. Used when nothing is configured so the hosted
+ * demo places real calls with ZERO setup — no copy-pasting a URL before a
+ * meeting. Clear the field in the console to force simulation mode. */
+export const DEFAULT_BACKEND_URL = 'https://intandem-emr-backend.onrender.com'
+
+/** Backend base URL. Precedence: explicit simulation → localStorage override →
+ * build-time VITE_BACKEND_URL → the deployed default. Empty = simulation. */
 export function getBackendUrl(): string {
   try {
     const rt = localStorage.getItem(LS_KEY)
+    if (rt === SIM) return '' // user explicitly chose simulation
     const bt = import.meta.env.VITE_BACKEND_URL as string | undefined
-    return (rt || bt || '').trim().replace(/\/+$/, '')
+    return (rt || bt || DEFAULT_BACKEND_URL).trim().replace(/\/+$/, '')
   } catch {
-    return ''
+    return DEFAULT_BACKEND_URL
   }
 }
 
 export function setBackendUrl(url: string) {
   try {
     const clean = url.trim().replace(/\/+$/, '')
-    if (clean) localStorage.setItem(LS_KEY, clean)
-    else localStorage.removeItem(LS_KEY)
+    // Storing the sentinel (rather than removing the key) keeps "cleared"
+    // distinguishable from "never configured".
+    localStorage.setItem(LS_KEY, clean || SIM)
   } catch {
     /* ignore */
   }

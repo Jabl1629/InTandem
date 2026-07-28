@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { CONTACT, RESIDENT, SCENARIOS, SCENARIO_ORDER } from './constants'
 import { useEmr } from './emrStore'
@@ -24,20 +24,22 @@ function Panel({ title, children, right }: { title: string; children: React.Reac
   )
 }
 
-function useHealth(): { mode: string; ok: boolean; checking: boolean } {
+function useHealth() {
   const [h, setH] = useState({ mode: '', ok: false, checking: true })
-  useEffect(() => {
-    let alive = true
+  // Re-runnable: the free tier sleeps, so a cold start can fail the first
+  // check and succeed ~50s later. The status pill calls this.
+  const recheck = useCallback(() => {
     if (!backendConfigured()) {
       setH({ mode: 'simulation', ok: true, checking: false })
       return
     }
-    checkHealth(getBackendUrl()).then((r) => alive && setH({ mode: r.mode ?? 'unreachable', ok: r.ok, checking: false }))
-    return () => {
-      alive = false
-    }
+    setH((p) => ({ ...p, checking: true }))
+    checkHealth(getBackendUrl()).then((r) =>
+      setH({ mode: r.mode ?? 'unreachable', ok: r.ok, checking: false }),
+    )
   }, [])
-  return h
+  useEffect(recheck, [recheck])
+  return { ...h, recheck }
 }
 
 export function Console() {
@@ -72,10 +74,15 @@ export function Console() {
             <div className="text-xs" style={{ color: SUB }}>Family-notification demo controls · {RESIDENT.full}</div>
           </div>
           <div className="flex items-center gap-3">
-            <span className="inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-xs" style={{ borderColor: LINE }}>
+            <button
+              onClick={health.recheck}
+              title="Click to re-check. The free tier sleeps after ~15 min idle; the first wake takes ~50s."
+              className="inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-xs transition-colors hover:bg-white/5"
+              style={{ borderColor: LINE }}
+            >
               <span className="h-2 w-2 rounded-full" style={{ background: health.checking ? '#f5a623' : health.ok ? '#34d399' : '#ef6b5b' }} />
-              {health.checking ? 'checking…' : health.mode}
-            </span>
+              {health.checking ? 'waking…' : health.mode}
+            </button>
             <a href="#/emr" target="_blank" rel="noreferrer" className="rounded border px-2.5 py-1 text-xs hover:bg-white/5" style={{ borderColor: LINE }}>
               Open /emr ↗
             </a>
@@ -87,7 +94,9 @@ export function Console() {
         <Panel title="Setup">
           <div className="space-y-3">
             <div>
-              <label className="text-xs" style={{ color: SUB }}>Backend URL (blank = simulation)</label>
+              <label className="text-xs" style={{ color: SUB }}>
+                Backend URL — pre-filled; clear it to force simulation mode
+              </label>
               <div className="mt-1 flex gap-2">
                 <input
                   value={urlDraft}

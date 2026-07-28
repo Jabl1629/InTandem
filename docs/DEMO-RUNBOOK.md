@@ -44,17 +44,18 @@ You want `{"ok":true,"mode":"live"}`.
 ### 2. Open the console on your laptop
 https://jabl1629.github.io/InTandem/#/console
 
-Fill in the **Setup** panel:
+**The backend URL is already filled in — you don't need to paste anything.** The status pill top-right should read a green **live**.
+
+Set two fields:
 
 | Field | Value |
 |---|---|
-| **Backend URL** | `https://intandem-emr-backend.onrender.com` → **Save & connect** |
-| **Target phone** | E.164, e.g. `+17205551234` — **whoever's phone should ring** |
+| **Target phone** | E.164, e.g. `+17205551234` — **this phone actually rings** |
 | **Contact first name** | the name the AI greets ("Is this ___?") |
 
-The status pill top-right should read a green **live**. (Blank backend URL = simulation mode, which still works with no phone call — good for practice.)
-
-The backend URL persists in that browser's localStorage, so you only do this once per machine/browser. **A new laptop or a cleared browser = redo this step.**
+- **Pill says `waking…` or `unreachable`?** Cold start. **Click the pill** to re-check — it retries.
+- **Want simulation mode?** Clear the Backend URL field and hit **Save & connect**. No calls, everything else works.
+- Only click **Save & connect** if you actually changed the URL.
 
 ### 3. Open the EMR on the projector
 Click **Open /emr ↗** in the console header — pops it into its own tab. Put that on the TV/projector; keep the console on your laptop.
@@ -98,7 +99,7 @@ The **S3a → S3b** pair is the emotional peak: the system made a promise and ke
 |---|---|
 | First call is slow / nothing happens | Cold start — hit `/api/health`, wait for a response, retry |
 | Status pill says `mock` | API key not read → check Render → Environment → `ELEVENLABS_API_KEY` |
-| Status pill says `unreachable` | Backend asleep or URL typo'd. Load the health URL directly |
+|  Backend asleep or URL typo.d. Load the health URL directly | Backend asleep or URL typo'd. Load the health URL directly |
 | Phone doesn't ring | Target phone must be **E.164** (`+1…`, no spaces/dashes/parens) |
 | Note renders with blank fields | ElevenLabs agent's data-collection field IDs don't match — see below |
 | Everything is broken | Console → **Reset demo**. Worst case, fall back to simulation mode (blank the Backend URL) — no calls, but the full on-screen flow still runs |
